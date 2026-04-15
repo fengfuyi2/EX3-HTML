@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #f0f8ff;
+            padding: 40px;
+            text-align: center;
+        }
+        .game-container {
+            width: 600px;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        #scrambledWord {
+            font-size: 28px;
+            font-weight: 700;
+            color: #e67e22;
+            margin: 20px 0px;
+            letter-spacing: 2px;
+        }
+        #guess {
+            padding: 10px 15px;
+            font-size: 16px;
+            width: 250px;
+            border: 2px solid #bdc3c7;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+        }
+        #checkBtn {
+            background-color: #27ae60;
+            color: white;
+        }
+        #checkBtn:hover {
+            background-color: #219653;
+        }
+        #newWordBtn {
+            background-color: #3498db;
+            color: white;
+        }
+        #newWordBtn:hover {
+            background-color: #2980b9;
+        }
+        #result {
+            font-size: 20px;
+            margin: 20px 0px;
+            font-weight: 700;
+        }
+        #gameImage {
+            margin: 20px auto;
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <section class="game-container">
+        <h1>Word Scramble Game</h1>
+        <div>
+            <p>Try to guess the word!</p>
+        </div>
+        <div id="scrambledWord"></div>
+        <div><input type="text" id="guess" placeholder="请输入你的答案"></div>
+        <br>
+        <div class="button-group">
+            <span><button id="checkBtn" onclick="checkAnswer()">Check Answer</button></span>
+            <span><button id="newWordBtn" onclick="starGame()">New Word</button></span>
+        </div>
+        <div id="result"></div>
+        <img id="gameImage" alt="Word Image">
+    </section>
+
+    <script>
+        const wordList = [
+            { word: "doraemon", imageID:"./character-doraemon.png"},
+            { word: "dorami", imageID:"./character-dorami.png"},
+            { word: "nobita", imageID:"./character-nobita.png"},
+            { word: "shizuka", imageID:"./character-shizuka.png"},
+            { word: "gian", imageID:"./character-gian.png"},
+            { word: "suneo", imageID:"./character-suneo.png"},
+            { word: "jaiko", imageID:"./character-jaiko.png"},
+            { word: "nobita's mom", imageID:"./character-nobita's mom.png"},
+            { word: "nobita's dad", imageID:"./character-nobita's dad.png"},
+        ];
+
+        let currentWord;
+        let currentImg;
+
+        window.onload = starGame;
+
+        function starGame(){
+            const randomObject = wordList[Math.floor(Math.random() * wordList.length)];
+            currentWord = randomObject.word;
+            currentImg = randomObject.imageID;
+
+            let scrambled = scrambledWord(currentWord);
+
+            document.getElementById("scrambledWord").innerText = scrambled;
+            document.getElementById("result").innerText = "";
+            document.getElementById("guess").innerText = "";
+
+            document.getElementById("gameImage").style.display = "none";
+        }
+
+        function scrambledWord(word) {
+            let scrambled = currentWord.split("");
+
+            for(let i = 0; i < scrambled.length; i++){
+                let randomIndex = Math.floor(Math.random() * scrambled.length);
+                let temp = scrambled[i];
+                scrambled[i] = scrambled[randomIndex];
+                scrambled[randomIndex] = temp;
+            }
+
+            return scrambled.join("");
+        }
+
+        function checkAnswer() {
+            const userGuess = document.getElementById("guess").value;
+            const resultElement = document.getElementById("result");
+            
+            if(userGuess.toLowerCase() === currentWord.toLowerCase()){
+                resultElement.innerText = `Correct! Well Done!`;
+                resultElement.style.color = "#27ae60";
+                document.getElementById("gameImage").src = currentImg;
+                document.getElementById("gameImage").style.display = "block";
+            } else {
+                resultElement.innerText = `Wrong! Try again!`;
+                resultElement.style.color = "#e74c3c";
+                document.getElementById("gameImage").style.display = "none";
+            }
+        }
+
+    </script>
+</body>
+</html>
+
